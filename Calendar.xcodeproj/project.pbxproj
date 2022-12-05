@@ -13,7 +13,6 @@
 		CE2294FD29115AAD007CE8C1 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = CE2294FC29115AAD007CE8C1 /* FSCalendar */; };
 		CE238BA82910075B00B40540 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE238BA72910075B00B40540 /* AppDelegate.swift */; };
 		CE238BAA2910075B00B40540 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE238BA92910075B00B40540 /* SceneDelegate.swift */; };
-		CE238BAC2910075B00B40540 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE238BAB2910075B00B40540 /* ViewController.swift */; };
 		CE238BAF2910075B00B40540 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE238BAD2910075B00B40540 /* Main.storyboard */; };
 		CE238BB12910075D00B40540 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE238BB02910075D00B40540 /* Assets.xcassets */; };
 		CE238BB42910075D00B40540 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE238BB22910075D00B40540 /* LaunchScreen.storyboard */; };
@@ -41,7 +40,6 @@
 		CE238BA42910075B00B40540 /* Calendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE238BA72910075B00B40540 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CE238BA92910075B00B40540 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		CE238BAB2910075B00B40540 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		CE238BAE2910075B00B40540 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CE238BB02910075D00B40540 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CE238BB32910075D00B40540 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -122,7 +120,6 @@
 				CE2294F22910DF2E007CE8C1 /* Interface */,
 				CE238BA72910075B00B40540 /* AppDelegate.swift */,
 				CE238BA92910075B00B40540 /* SceneDelegate.swift */,
-				CE238BAB2910075B00B40540 /* ViewController.swift */,
 				CE238BAD2910075B00B40540 /* Main.storyboard */,
 				CE238BB02910075D00B40540 /* Assets.xcassets */,
 				CE238BB22910075D00B40540 /* LaunchScreen.storyboard */,
@@ -254,7 +251,6 @@
 				CEDA77B22939E82C00186CF8 /* Users.swift in Sources */,
 				CE998D17291ACD0C00E57B84 /* RegistrationViewController.swift in Sources */,
 				CE28BA63291E952000A0D631 /* EventViewController.swift in Sources */,
-				CE238BAC2910075B00B40540 /* ViewController.swift in Sources */,
 				CE998D15291ACCF600E57B84 /* AuthorizationViewController.swift in Sources */,
 				CE2294F82910E2D3007CE8C1 /* AdditionViewController.swift in Sources */,
 				CE238BA82910075B00B40540 /* AppDelegate.swift in Sources */,
