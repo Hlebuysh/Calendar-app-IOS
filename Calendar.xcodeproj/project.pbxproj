@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE0AC6D2293E3850007BDD85 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0AC6D1293E3850007BDD85 /* SettingsViewController.swift */; };
+		CE0AC6D6293FBE26007BDD85 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0AC6D5293FBE26007BDD85 /* Alert.swift */; };
 		CE1DD81D292CDE1000770964 /* TransporentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1DD81C292CDE1000770964 /* TransporentView.swift */; };
 		CE2294F62910DF6B007CE8C1 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2294F52910DF6B007CE8C1 /* CalendarViewController.swift */; };
 		CE2294F82910E2D3007CE8C1 /* AdditionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2294F72910E2D3007CE8C1 /* AdditionViewController.swift */; };
@@ -27,6 +29,7 @@
 		CE998D17291ACD0C00E57B84 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE998D16291ACD0C00E57B84 /* RegistrationViewController.swift */; };
 		CEB3D4262913D9B500266568 /* MenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB3D4252913D9B500266568 /* MenuTableViewCell.swift */; };
 		CEDA77B22939E82C00186CF8 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDA77B12939E82C00186CF8 /* Users.swift */; };
+		CEDE20482949D9DF001F7613 /* Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDE20472949D9DF001F7613 /* Events.swift */; };
 		CEF21CBB2937259D00930F06 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEF21CBA2937259D00930F06 /* GoogleService-Info.plist */; };
 		CEF21CC729372B3E00930F06 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = CEF21CC629372B3E00930F06 /* FirebaseAnalytics */; };
 		CEF21CC929372B5400930F06 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = CEF21CC829372B5400930F06 /* FirebaseAuth */; };
@@ -34,6 +37,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CE0AC6D1293E3850007BDD85 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		CE0AC6D5293FBE26007BDD85 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		CE1DD81C292CDE1000770964 /* TransporentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransporentView.swift; sourceTree = "<group>"; };
 		CE2294F52910DF6B007CE8C1 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		CE2294F72910E2D3007CE8C1 /* AdditionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionViewController.swift; sourceTree = "<group>"; };
@@ -54,6 +59,7 @@
 		CE998D16291ACD0C00E57B84 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		CEB3D4252913D9B500266568 /* MenuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewCell.swift; sourceTree = "<group>"; };
 		CEDA77B12939E82C00186CF8 /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
+		CEDE20472949D9DF001F7613 /* Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Events.swift; sourceTree = "<group>"; };
 		CEF21CBA2937259D00930F06 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -77,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				CE1DD81C292CDE1000770964 /* TransporentView.swift */,
+				CE0AC6D5293FBE26007BDD85 /* Alert.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -92,6 +99,7 @@
 				CE998D16291ACD0C00E57B84 /* RegistrationViewController.swift */,
 				CE652FF2291B24DF00F316B9 /* MenuViewController.swift */,
 				CE28BA62291E952000A0D631 /* EventViewController.swift */,
+				CE0AC6D1293E3850007BDD85 /* SettingsViewController.swift */,
 			);
 			path = Interface;
 			sourceTree = "<group>";
@@ -145,6 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				CEDA77B12939E82C00186CF8 /* Users.swift */,
+				CEDE20472949D9DF001F7613 /* Events.swift */,
 			);
 			path = Database;
 			sourceTree = "<group>";
@@ -245,13 +254,16 @@
 				CE2294F62910DF6B007CE8C1 /* CalendarViewController.swift in Sources */,
 				CE28BA66291EAE2400A0D631 /* TeamMemberCell.swift in Sources */,
 				CEB3D4262913D9B500266568 /* MenuTableViewCell.swift in Sources */,
+				CE0AC6D6293FBE26007BDD85 /* Alert.swift in Sources */,
 				CE652FF3291B24DF00F316B9 /* MenuViewController.swift in Sources */,
 				CE1DD81D292CDE1000770964 /* TransporentView.swift in Sources */,
 				CE37E5AC291E2751004FBF3B /* EventCell.swift in Sources */,
 				CEDA77B22939E82C00186CF8 /* Users.swift in Sources */,
 				CE998D17291ACD0C00E57B84 /* RegistrationViewController.swift in Sources */,
 				CE28BA63291E952000A0D631 /* EventViewController.swift in Sources */,
+				CE0AC6D2293E3850007BDD85 /* SettingsViewController.swift in Sources */,
 				CE998D15291ACCF600E57B84 /* AuthorizationViewController.swift in Sources */,
+				CEDE20482949D9DF001F7613 /* Events.swift in Sources */,
 				CE2294F82910E2D3007CE8C1 /* AdditionViewController.swift in Sources */,
 				CE238BA82910075B00B40540 /* AppDelegate.swift in Sources */,
 				CE238BAA2910075B00B40540 /* SceneDelegate.swift in Sources */,

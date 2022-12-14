@@ -56,28 +56,29 @@ extension AuthorizationViewController{
         if (!emailField.text!.isEmpty && !passwordField.text!.isEmpty){
             Auth.auth().signIn(withEmail: emailField.text!, password: passwordField.text!) { (result, error) in
                 if error == nil{
-                    if !result!.user.isEmailVerified {
-                        self.showAlert(alertMessage: "Подтвердите свою почту")
-                    }
-                    else{
+//                    if !result!.user.isEmailVerified {
+//                        self.showAlert(message: "Подтвердите свою почту")
+//                    }
+//                    else{
                         self.goToCalendar()
-                    }
+//                    }
                 }
                 else{
-                    self.showAlert(alertMessage: error!.localizedDescription)
+                    self.showAlert(message: error!.localizedDescription)
                 }
             }
         }
         else{
-            showAlert(alertMessage: "Запоните все поля")
+            self.showAlert(message: "Запоните все поля")
         }
     }
-    private func showAlert(alertMessage: String){
-        let alert = UIAlertController(title: "Ошибка", message: alertMessage, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-    }
     private func goToCalendar(){
-        performSegue(withIdentifier: "FromAuthorizationToCalendar", sender: self)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        if navigationController?.viewControllers.count ?? 0 > 1{
+            navigationController?.popViewController(animated: true)
+        }
+        else{
+            performSegue(withIdentifier: "FromAuthorizationToCalendar", sender: self)
+        }
     }
 }

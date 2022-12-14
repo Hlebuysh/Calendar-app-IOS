@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 class EventViewController: UIViewController {
 
@@ -24,17 +25,39 @@ class EventViewController: UIViewController {
     @IBOutlet weak private var teamTableHeight: NSLayoutConstraint!
     
     
-    private let team: [String] = ["Person 1", "Person 2"]
+    var event: Event = Event()
+    
+    private var team: [String] = []
     
     override func viewDidLoad() {
+        
+        teamTabel.register(UINib(nibName: "TeamMemberCell", bundle: nil), forCellReuseIdentifier: "TeamMemberCellPrototype")
+        for (person, status) in event.group{
+            Database.database(url: "https://calendarappforios-default-rtdb.europe-west1.firebasedatabase.app").reference().child("users").child(person as! String).child("login").observeSingleEvent(of: .value) { snapshot in
+//                print(snapshot)
+//                print(snapshot.value)
+                self.team.append(snapshot.value as! String)
+                self.team.sort()
+                if self.team.count > 0{
+                    self.teamTableHeight.constant = 60
+                    self.view.setNeedsLayout()
+                }
+                self.teamTabel.reloadData()
+            }
+        }
+        
+        self.dateLabel.text = self.event.date
+        self.titleLable.text = self.event.title
+        self.startTimeLable.text = self.event.startTime
+        self.endTimeLable.text = self.event.endTime
+        self.descriptionTextView.text = self.event.description
+        
+        
         super.viewDidLoad()
         navigationController?.setNavigationBarHidden(true, animated: false)
         if team.count == 0{
             teamTableHeight.constant = 0
             self.view.setNeedsLayout()
-        }
-        else{
-            teamTabel.register(UINib(nibName: "TeamMemberCell", bundle: nil), forCellReuseIdentifier: "TeamMemberCellPrototype")
         }
     }
     @IBAction private func tapCloseButton(_ sender: Any) {

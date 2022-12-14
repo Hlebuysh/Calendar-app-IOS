@@ -7,17 +7,9 @@
 
 import UIKit
 import FSCalendar
+import Firebase
 
 class CalendarViewController: UIViewController {
-    
-    private struct event{
-        var title: String
-        var description: String
-        init(title: String, description: String) {
-            self.title = title
-            self.description = description
-        }
-    }
     
     @IBOutlet weak private var buttonStack: UIStackView!
     @IBOutlet weak private var yearButton: UIButton!
@@ -38,10 +30,15 @@ class CalendarViewController: UIViewController {
     
     private var choiceTable = [String]()
     
-    private var events: [event] = [event(title: "Событие 1", description: "13:00 - 14:00"), event(title: "Событие 2", description: "16:00 - 18:00")]
+    private var events: [Event] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        getUserEvents(uid: Auth.auth().currentUser!.uid, table: eventsTable, selectedDate: self.calendarTable.selectedDate ?? Date())
+        
+        print("count: "+String(events.count))
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -55,6 +52,11 @@ class CalendarViewController: UIViewController {
         eventsTable.register(UINib(nibName: "EventCell", bundle: nil), forCellReuseIdentifier: "EventCellPrototype")
         
         print(navigationController?.viewControllers.count ?? "No")
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard segue.identifier == "FromCalendarToEvent" else { return }
+        guard let destination = segue.destination as? EventViewController else { return }
+        destination.event = events[eventsTable.indexPathForSelectedRow!.row]
     }
     
     @IBAction private func choiceYear(_ sender: Any) {
@@ -77,7 +79,6 @@ class CalendarViewController: UIViewController {
         selectedButton = monthButton
         addTransporentView(x: Int(buttonStack.frame.origin.x) + Int(monthButton.frame.origin.x), y: Int(buttonStack.frame.origin.y) + Int(monthButton.frame.origin.y) + Int(monthButton.frame.height), width: Int(monthButton.frame.width))
     }
-
 }
 
 extension CalendarViewController{
@@ -125,9 +126,12 @@ extension CalendarViewController:UITableViewDelegate, UITableViewDataSource{
             return cell
         }
         else{
+//            events = getUserEvents(uid: Auth.auth().currentUser!.uid)
             let cell = tableView.dequeueReusableCell(withIdentifier: "EventCellPrototype", for: indexPath) as! EventCell
+            print(events.count)
+            print(indexPath.row)
             cell.titleLable?.text = events[indexPath.row].title
-            cell.descriptionLable?.text = events[indexPath.row].description
+            cell.descriptionLable?.text = events[indexPath.row].startTime+" - "+events[indexPath.row].endTime
             return cell
         }
     }
@@ -193,6 +197,8 @@ extension CalendarViewController: FSCalendarDelegate{
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         yearButton.setTitle(String(Calendar.current.component(.year, from: date)), for: .normal)
         monthButton.setTitle(months[Calendar.current.component(.month, from: date) - 1], for: .normal)
+        getUserEvents(uid: Auth.auth().currentUser!.uid, table: eventsTable, selectedDate: self.calendarTable.selectedDate ?? Date())
+        
     }
 }
 extension CalendarViewController:FSCalendarDataSource{
@@ -204,3 +210,35 @@ extension CalendarViewController:FSCalendarDataSource{
     }
 }
 
+extension CalendarViewController{
+    func getUserEvents(uid: String, table: UITableView, selectedDate: Date){
+        events = []
+        table.reloadData()
+        let ref = Database.database(url: "https://calendarappforios-default-rtdb.europe-west1.firebasedatabase.app").reference()
+        ref.child("users").child(uid).child("events").observeSingleEvent(of: .value) { snapshot in
+            if (snapshot.exists()){
+                let data = snapshot.value as! [String:Bool]
+                for (key, value) in data{
+                    if value == true{
+                        let dateformat = DateFormatter()
+                        dateformat.dateFormat = "dd.MM.YYYY"
+                        
+                        self.getEvent(eventID: key, reference: ref, table: table, selectedDate: dateformat.string(from: selectedDate))
+                    }
+                }
+            }
+            
+        }
+    }
+    private func getEvent(eventID: String, reference: DatabaseReference, table: UITableView, selectedDate: String){
+        reference.child("events").child(eventID).observeSingleEvent(of: .value) { snap in
+            if (snap.value as! [String:Any])["date"] as! String == selectedDate{
+                self.events.append(Event(data: snap))
+                self.events.sort { left_event, right_event in
+                    return left_event.startTime < right_event.startTime
+                }
+                table.reloadData()
+            }
+        }
+    }
+}

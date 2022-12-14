@@ -61,7 +61,7 @@ extension RegistrationViewController{
                     if let result = result{
                         Auth.auth().currentUser?.sendEmailVerification(completion: { (error) in
                             if error != nil{
-                                self.showAlert(alertMessage: error!.localizedDescription)
+                                self.showAlert(message: error!.localizedDescription)
                                 
                             }
                         })
@@ -73,19 +73,13 @@ extension RegistrationViewController{
                     self.goToAuthorization(self)
                 }
                 else{
-                    self.showAlert(alertMessage: error!.localizedDescription)
+                    self.showAlert(message: error!.localizedDescription)
                 }
             }
             
         }
         else{
-            self.showAlert(alertMessage: "Запоните все поля")
+            self.showAlert(message: "Запоните все поля")
         }
-    }
-    
-    private func showAlert(alertMessage: String){
-        let alert = UIAlertController(title: "Ошибка", message: alertMessage, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
     }
 }
