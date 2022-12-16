@@ -6,7 +6,6 @@
 //
 
 
-import Firebase
 import UIKit
 
 class SettingsViewController: UITableViewController {
@@ -19,19 +18,13 @@ class SettingsViewController: UITableViewController {
         super.viewDidLoad()
         signOutButton.layer.borderWidth = 0.5
         signOutButton.layer.borderColor = UIColor.blue.cgColor
-        Database.database(url: "https://calendarappforios-default-rtdb.europe-west1.firebasedatabase.app").reference().child("users").child(Auth.auth().currentUser!.uid).child("login").observeSingleEvent(of: .value) { snapshot in
-            
-            
-        }
+        loginField.text = currentUser()
     }
 
-    @IBAction func GoToAuthorization(_ sender: Any) {
-        do{
-            try Auth.auth().signOut()
-        }catch let error as NSError
-        {
-            print (error.localizedDescription)
-        }
+    @IBAction func signOutClick(_ sender: Any) {
+        signOutUser(complition: goToAuthorization)
+    }
+    private func goToAuthorization() {
         performSegue(withIdentifier: "FromSettingsToAuthorization", sender: self)
     }
 }

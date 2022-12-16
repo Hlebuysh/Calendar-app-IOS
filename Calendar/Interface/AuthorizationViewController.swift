@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import FirebaseAuth
+//import FirebaseAuth
 
 class AuthorizationViewController: UIViewController {
     
@@ -21,11 +21,7 @@ class AuthorizationViewController: UIViewController {
         super.viewDidLoad()
         if (navigationController?.viewControllers.count == 1){
             navigationController?.setNavigationBarHidden(true, animated: false)
-            Auth.auth().addStateDidChangeListener { auth, user in
-                if user != nil{
-                    self.goToCalendar()
-                }
-            }
+            didSignIn(complition: goToCalendar)
         }
     }
     
@@ -34,7 +30,7 @@ class AuthorizationViewController: UIViewController {
     }
     
     @IBAction private func goToRegistration(_ sender: Any) {
-        performSegue(withIdentifier: "FromAuthorizationToRegisration", sender: self)
+        performSegue(withIdentifier: "FromAuthorizationToRegistration", sender: self)
     }
 }
 
@@ -54,19 +50,7 @@ extension AuthorizationViewController:UITextFieldDelegate{
 extension AuthorizationViewController{
     private func checkLogin(){
         if (!emailField.text!.isEmpty && !passwordField.text!.isEmpty){
-            Auth.auth().signIn(withEmail: emailField.text!, password: passwordField.text!) { (result, error) in
-                if error == nil{
-//                    if !result!.user.isEmailVerified {
-//                        self.showAlert(message: "Подтвердите свою почту")
-//                    }
-//                    else{
-                        self.goToCalendar()
-//                    }
-                }
-                else{
-                    self.showAlert(message: error!.localizedDescription)
-                }
-            }
+            signInUser(email: emailField.text!, password: passwordField.text!, complition: goToCalendar)
         }
         else{
             self.showAlert(message: "Запоните все поля")
@@ -78,7 +62,7 @@ extension AuthorizationViewController{
             navigationController?.popViewController(animated: true)
         }
         else{
-            performSegue(withIdentifier: "FromAuthorizationToCalendar", sender: self)
+            performSegue(withIdentifier: "FromAuthorizationToProgress", sender: self)
         }
     }
 }

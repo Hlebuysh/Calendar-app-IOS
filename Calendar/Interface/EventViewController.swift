@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Firebase
 
 class EventViewController: UIViewController {
 
@@ -24,25 +23,27 @@ class EventViewController: UIViewController {
     
     @IBOutlet weak private var teamTableHeight: NSLayoutConstraint!
     
+    struct Member{
+        var login: String
+        var status: Int
+        init(_ login: String, _ status: Int) {
+            self.login = login
+            self.status = status
+        }
+    }
+    
     
     var event: Event = Event()
     
-    private var team: [String] = []
+    private var team: [Member] = []
     
     override func viewDidLoad() {
         
         teamTabel.register(UINib(nibName: "TeamMemberCell", bundle: nil), forCellReuseIdentifier: "TeamMemberCellPrototype")
         for (person, status) in event.group{
-            Database.database(url: "https://calendarappforios-default-rtdb.europe-west1.firebasedatabase.app").reference().child("users").child(person as! String).child("login").observeSingleEvent(of: .value) { snapshot in
-//                print(snapshot)
-//                print(snapshot.value)
-                self.team.append(snapshot.value as! String)
-                self.team.sort()
-                if self.team.count > 0{
-                    self.teamTableHeight.constant = 60
-                    self.view.setNeedsLayout()
-                }
-                self.teamTabel.reloadData()
+            let member = findUser(uid: person)!["login"] as! String
+            if (member != currentUser()){
+                team.append(Member(member, status))
             }
         }
         
@@ -72,7 +73,13 @@ extension EventViewController: UITableViewDataSource, UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TeamMemberCellPrototype", for: indexPath) as! TeamMemberCell
-        cell.nicknameLable.text = "    "+team[indexPath.row]+"    "
+        cell.nicknameLable.text = "    "+team[indexPath.row].login+"    "
+        if team[indexPath.row].status == 1{
+            cell.nicknameLable.backgroundColor = UIColor.green
+        }
+        else if team[indexPath.row].status == -1{
+            cell.nicknameLable.backgroundColor = UIColor.red
+        }
         cell.nicknameLable.layer.masksToBounds = true
         return cell
     }

@@ -7,7 +7,7 @@
 
 import UIKit
 import FSCalendar
-import Firebase
+//import Firebase
 
 class CalendarViewController: UIViewController {
     
@@ -34,12 +34,6 @@ class CalendarViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        getUserEvents(uid: Auth.auth().currentUser!.uid, table: eventsTable, selectedDate: self.calendarTable.selectedDate ?? Date())
-        
-        print("count: "+String(events.count))
-        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
@@ -159,7 +153,7 @@ extension CalendarViewController:UITableViewDelegate, UITableViewDataSource{
             changeDateOnCalendar()
         }
         else{
-            let currentCell = tableView.cellForRow(at: indexPath) as! EventCell
+//            let currentCell = tableView.cellForRow(at: indexPath) as! EventCell
             performSegue(withIdentifier: "FromCalendarToEvent", sender: self)
 //            if currentCell.informationField.backgroundColor == UIColor.lightGray{
 //                currentCell.informationField.backgroundColor = UIColor.darkGray
@@ -197,8 +191,8 @@ extension CalendarViewController: FSCalendarDelegate{
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         yearButton.setTitle(String(Calendar.current.component(.year, from: date)), for: .normal)
         monthButton.setTitle(months[Calendar.current.component(.month, from: date) - 1], for: .normal)
-        getUserEvents(uid: Auth.auth().currentUser!.uid, table: eventsTable, selectedDate: self.calendarTable.selectedDate ?? Date())
-        
+        events = getEventsByDate(date: calendarTable.selectedDate ?? Date())
+        eventsTable.reloadData()
     }
 }
 extension CalendarViewController:FSCalendarDataSource{
@@ -210,35 +204,3 @@ extension CalendarViewController:FSCalendarDataSource{
     }
 }
 
-extension CalendarViewController{
-    func getUserEvents(uid: String, table: UITableView, selectedDate: Date){
-        events = []
-        table.reloadData()
-        let ref = Database.database(url: "https://calendarappforios-default-rtdb.europe-west1.firebasedatabase.app").reference()
-        ref.child("users").child(uid).child("events").observeSingleEvent(of: .value) { snapshot in
-            if (snapshot.exists()){
-                let data = snapshot.value as! [String:Bool]
-                for (key, value) in data{
-                    if value == true{
-                        let dateformat = DateFormatter()
-                        dateformat.dateFormat = "dd.MM.YYYY"
-                        
-                        self.getEvent(eventID: key, reference: ref, table: table, selectedDate: dateformat.string(from: selectedDate))
-                    }
-                }
-            }
-            
-        }
-    }
-    private func getEvent(eventID: String, reference: DatabaseReference, table: UITableView, selectedDate: String){
-        reference.child("events").child(eventID).observeSingleEvent(of: .value) { snap in
-            if (snap.value as! [String:Any])["date"] as! String == selectedDate{
-                self.events.append(Event(data: snap))
-                self.events.sort { left_event, right_event in
-                    return left_event.startTime < right_event.startTime
-                }
-                table.reloadData()
-            }
-        }
-    }
-}

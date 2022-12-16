@@ -2,53 +2,7 @@
 import UIKit
 import Firebase
 
-struct Event{
-    var id: String
-    var creator: String
-    var date: String
-    var startTime: String
-    var endTime: String
-    var title: String
-    var description: String
-    var isImpotant: Bool
-    var group: [String : Int]
-    init(){
-        self.id = ""
-        self.creator = ""
-        self.date = ""
-        self.startTime = ""
-        self.endTime = ""
-        self.title = ""
-        self.description = ""
-        self.isImpotant = false
-        self.group = [:]
-    }
-    init(data: DataSnapshot){
-        self.id = data.key
-        print("Data:")
-        print(data)
-        let value = data.value as! [String:Any]
-        self.creator = value["creator"] as! String
-        self.date = value["date"] as! String
-        self.startTime = value["start_time"] as! String
-        self.endTime = value["end_time"] as! String
-        self.title = value["title"] as! String
-        self.description = value["description"] as! String
-        self.isImpotant = value["is_important"] as! Bool
-        self.group = value["group"] as! [String:Int]
-    }
-    init(_ id: String, _ creator: String, _ date: String, _ startTime: String, _ endTime: String, _ title: String, _ description: String, _ isImporant: Bool, _ group: [String : Int]){
-        self.id = id
-        self.creator = creator
-        self.date = date
-        self.startTime = startTime
-        self.endTime = endTime
-        self.title = title
-        self.description = description
-        self.isImpotant = isImporant
-        self.group = group
-    }
-}
+
 
 class AdditionViewController: UIViewController{
     
@@ -187,25 +141,18 @@ class AdditionViewController: UIViewController{
             showAlert(title: "Заполните поле", message: "Введите имя пользователя")
             return
         }
-        Database.database(url: "https://calendarappforios-default-rtdb.europe-west1.firebasedatabase.app").reference().child("users").queryOrdered(byChild: "login").queryEqual(toValue: addUserText.text).observeSingleEvent(of: .value, with: { result in
-                if !result.exists(){
-                    self.showAlert(title: "Пользователь не найден", message: "Проверьте правильность заполнения поля")
-    
-                }
-                else{
-                    let data = result.value as! [String : Any]
-                    for (key, value) in data{
-                    self.event.group[key] = 0
-                    }
-//           self.group[data.] = 0
-                }
-        })
+        if let member = findUser(login: addUserText.text!){
+            event.group[member] = 0
+        }
+        else{
+            showAlert(message: "Такого пользователя не существует")
+        }
     }
     
     
     @IBAction func addEvent(_ sender: Any) {
         if titleText.text!.isEmpty{
-            
+            showAlert(message: "")
             return
         }
         event.creator = Auth.auth().currentUser!.uid
@@ -234,12 +181,7 @@ class AdditionViewController: UIViewController{
         
         event.isImpotant = importanceSwitch.isOn
         
-        let ref = Database.database(url: "https://calendarappforios-default-rtdb.europe-west1.firebasedatabase.app").reference()
-        let event_id = ref.child("events").childByAutoId()
-        event_id.updateChildValues(["creator":event.creator, "date":event.date, "start_time":event.startTime, "end_time":event.endTime, "title":event.title, "description":event.description, "is_important":event.isImpotant, "group":event.group])
-//        print(event_id.key)
-//        print(Auth.auth().currentUser!.uid)
-        ref.child("users").child(Auth.auth().currentUser!.uid).child("events").child(event_id.key!).setValue(true)
+        saveEvent(event: event)
     }
     
     

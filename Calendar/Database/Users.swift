@@ -7,39 +7,26 @@
 
 import Firebase
 
-fileprivate var users: [String:String] = [:]
+var users: [String:[String:Any]] = [:]
 
-extension UIViewController {
-    class func currentViewController(base: UIViewController! = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController! {
-        if let nav = base as? UINavigationController {
-            return currentViewController(base: nav.visibleViewController)
-        }
-        if let tab = base as? UITabBarController {
-            return currentViewController(base: tab.selectedViewController)
-        }
-        if let presented = base?.presentedViewController {
-            return currentViewController(base: presented)
-        }
-        return base
-    }
-}
 
-func signInUser(email: String, password: String) -> Bool{
-    var ret: Bool = false
+
+
+
+func signInUser(email: String, password: String, complition: @escaping () -> Void){
     Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
         if error == nil{
 //                    if !result!.user.isEmailVerified {
 //                        self.showAlert(message: "Подтвердите свою почту")
 //                    }
 //                    else{
-                ret = true
+            complition()
 //                    }
         }
         else{
             UIViewController.currentViewController().showAlert(message: error!.localizedDescription)
         }
     }
-    return ret
 }
 
 func signUpUser(login: String, password: String, email: String) -> Bool{
@@ -67,24 +54,49 @@ func signUpUser(login: String, password: String, email: String) -> Bool{
     return ret
 }
 
-func signOutUser(){
+func signOutUser(complition: @escaping () -> Void){
     do{
         try Auth.auth().signOut()
+        complition()
     }catch let error as NSError
     {
         UIViewController.currentViewController().showAlert(message: error.localizedDescription)
     }
 }
 
-func getUsers(){
+func getUsers(complition: @escaping () -> Void){
     Database.database(url: "https://calendarappforios-default-rtdb.europe-west1.firebasedatabase.app").reference().child("users").observeSingleEvent(of: .value) { snapshot in
         let data = snapshot.value as! [String:[String:Any]]
         for (uid, udata) in data{
-            users[uid] = (udata["login"] as! String)
+            print(uid)
+            print(udata)
+            users[uid] = ["login" : udata["login"] as! String, "events" : udata["events"] as? [String:Bool]]
         }
+        complition()
     }
 }
 
-func findUser(uid: String) -> String?{
+func findUser(uid: String) -> [String:Any]?{
     return users[uid] ?? nil
+}
+func findUser(login: String) -> String?{
+    var result: String? = users.first(where: { (key: String, value: [String : Any]) in
+        return value["login"] as! String == login
+    })?.key
+    return result
+}
+
+func currentUserID() -> String!{
+    return Auth.auth().currentUser?.uid
+}
+func currentUser() -> String{
+    return users[currentUserID()]!["login"] as! String
+}
+
+func didSignIn(complition: @escaping () -> Void){
+    Auth.auth().addStateDidChangeListener { auth, user in
+        if user != nil{
+            complition()
+        }
+    }
 }

@@ -70,9 +70,8 @@
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
             <connections>
-                <outlet property="TitleLable" destination="nbL-Di-JTF" id="1Pq-Q3-RGo"/>
                 <outlet property="descriptionLable" destination="I0C-HY-sDO" id="dZ1-sc-4y9"/>
-                <outlet property="informationField" destination="4Cf-yj-wpu" id="5cv-Zg-4Sh"/>
+                <outlet property="informationField" destination="Utg-aM-cji" id="6kK-Xv-I6A"/>
                 <outlet property="titleLable" destination="nbL-Di-JTF" id="BBF-W1-hbS"/>
             </connections>
             <point key="canvasLocation" x="27.480916030534349" y="-7.042253521126761"/>

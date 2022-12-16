@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Firebase
+//import Firebase
 
 class RegistrationViewController: UIViewController {
     
@@ -56,27 +56,8 @@ extension RegistrationViewController:UITextFieldDelegate{
 extension RegistrationViewController{
     private func checkUser(){
         if (!loginField.text!.isEmpty && !passowrdField.text!.isEmpty && !emailField.text!.isEmpty){
-            Auth.auth().createUser(withEmail: emailField.text!, password: passowrdField.text!) { (result, error) in
-                if error == nil{
-                    if let result = result{
-                        Auth.auth().currentUser?.sendEmailVerification(completion: { (error) in
-                            if error != nil{
-                                self.showAlert(message: error!.localizedDescription)
-                                
-                            }
-                        })
-                        
-                        
-                        let ref = Database.database(url: "https://calendarappforios-default-rtdb.europe-west1.firebasedatabase.app").reference().child("users")
-                        ref.child(result.user.uid).updateChildValues(["login": self.loginField.text!, "email": self.emailField.text!])
-                    }
-                    self.goToAuthorization(self)
-                }
-                else{
-                    self.showAlert(message: error!.localizedDescription)
-                }
-            }
             
+            signUpUser(login: loginField.text!, password: passowrdField.text!, email: emailField.text!)
         }
         else{
             self.showAlert(message: "Запоните все поля")
