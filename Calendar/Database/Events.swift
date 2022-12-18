@@ -63,12 +63,12 @@ fileprivate var events: [Event] = []
 fileprivate var eventRequests: [Event] = []
 
 func getEvents(updateProgress: @escaping (Float) -> Void, complition: @escaping () -> Void){
-    if (users[currentUserID()]!["events"] == nil){
+    if (users[currentUserID()]!["events"] as? [String:Bool] == nil){
         updateProgress(1)
         complition()
         return
     }
-    for (key, stat) in (users[currentUserID()]!)["events"] as! [String:Bool]{
+    for (key, stat) in (users[currentUserID()]!["events"] as! [String:Bool]){
         Database.database(url: "https://calendarappforios-default-rtdb.europe-west1.firebasedatabase.app").reference().child("events").child(key).observeSingleEvent(of: .value) { snapshot in
             if stat == true{
                 events.append(Event(data: snapshot))
@@ -118,6 +118,9 @@ func requestsForming() -> [[Event]]{
     if eventRequests.count == 0 { return [] }
     var day = eventRequests[0].date
     requests[0].append(eventRequests[0])
+    if eventRequests.count == 1{
+        return requests
+    }
     for i in 1...(eventRequests.count - 1){
         if day != eventRequests[i].date{
             day = eventRequests[i].date
@@ -138,4 +141,20 @@ func saveEvent(event: Event){
         ref.child("users").child(member).child("events").child(event_id.key!).setValue(false)
     }
     ref.child("users").child(Auth.auth().currentUser!.uid).child("events").child(event_id.key!).setValue(true)
+}
+
+func refuseFromEvent(eventID: String){
+    let ref = Database.database(url: "https://calendarappforios-default-rtdb.europe-west1.firebasedatabase.app").reference()
+    ref.child("users").child(currentUserID()).child("events").child(eventID).removeValue { error, _ in
+        if error != nil{
+            UIViewController.currentViewController().showAlert(message: error!.localizedDescription)
+        }
+    }
+    ref.child("events").child(eventID).child("group").child(currentUserID()).setValue(-1)
+}
+
+func agreeToEvent(eventID: String){
+    let ref = Database.database(url: "https://calendarappforios-default-rtdb.europe-west1.firebasedatabase.app").reference()
+    ref.child("users").child(currentUserID()).child("events").child(eventID).setValue(true)
+    ref.child("events").child(eventID).child("group").child(currentUserID()).setValue(1)
 }

@@ -133,7 +133,7 @@
         <!--Progress View Controller-->
         <scene sceneID="IvW-9S-rkb">
             <objects>
-                <viewController id="8hd-Oh-LfN" customClass="ProgressViewController" customModule="Calendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="8hd-Oh-LfN" customClass="ProgressViewController" customModule="Calendar" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="778-Z1-pTw">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -188,7 +188,7 @@
         <!--Мероприятие-->
         <scene sceneID="dcm-RR-N0K">
             <objects>
-                <viewController storyboardIdentifier="AdditionViewController" id="Nti-ck-51Q" customClass="AdditionViewController" customModule="Calendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AdditionViewController" modalPresentationStyle="fullScreen" id="Nti-ck-51Q" customClass="AdditionViewController" customModule="Calendar" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="bB1-cm-yos">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -610,7 +610,7 @@
         <!--Requests View Controller-->
         <scene sceneID="Evq-2b-GDu">
             <objects>
-                <tableViewController id="TJi-MU-9fP" customClass="RequestsViewController" customModule="Calendar" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController modalPresentationStyle="fullScreen" id="TJi-MU-9fP" customClass="RequestsViewController" customModule="Calendar" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="LKn-6m-MLg">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -634,6 +634,9 @@
                                                     <color key="tintColor" systemColor="systemGreenColor"/>
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="plain" image="checkmark" catalog="system"/>
+                                                    <connections>
+                                                        <action selector="addToSchedule:" destination="6u4-PV-VwZ" eventType="touchUpInside" id="LSJ-sU-NDr"/>
+                                                    </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xe3-5p-idK">
                                                     <rect key="frame" x="64" y="0.0" width="64" height="64"/>
@@ -643,6 +646,9 @@
                                                     <color key="tintColor" systemColor="systemRedColor"/>
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="plain" image="xmark" catalog="system"/>
+                                                    <connections>
+                                                        <action selector="removeFromSchedule:" destination="6u4-PV-VwZ" eventType="touchUpInside" id="T0a-d5-Neh"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
@@ -1243,7 +1249,7 @@
         <!--Navigation Controller-->
         <scene sceneID="7GC-HV-VFa">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="ls0-N7-yfO" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" modalPresentationStyle="fullScreen" navigationBarHidden="YES" id="ls0-N7-yfO" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="gxF-j5-Tcz"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="7gV-t0-ckr">
@@ -1260,7 +1266,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="3wN-TY-Wze"/>
+        <segue reference="YOM-KH-2Vf"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="bell.fill" catalog="system" width="123" height="128"/>

@@ -14,6 +14,7 @@ class RequestsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         sections = requestsForming()
+        
     }
     
     
@@ -38,12 +39,27 @@ class RequestsViewController: UITableViewController {
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "RequestCellPrototype", for: indexPath) as! RequestCell
-        cell.titleLable.text = sections[indexPath.section][indexPath.row].title
-        cell.timeLable.text = sections[indexPath.section][indexPath.row].startTime + " - " + sections[indexPath.section][indexPath.row].endTime
+        cell.configure(
+            title: sections[indexPath.section][indexPath.row].title,
+            startTime: sections[indexPath.section][indexPath.row].startTime,
+            endTime: sections[indexPath.section][indexPath.row].endTime,
+            index: indexPath
+        )
+        cell.delegate = self
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "FromRequestsToEvent", sender: self)
     }
 
+}
+
+extension RequestsViewController: RequestCellDelegate{
+    func addToSchedule(with index: IndexPath) {
+        agreeToEvent(eventID: sections[index.section][index.row].id)
+    }
+    
+    func removeFromSchedule(with index: IndexPath) {
+        refuseFromEvent(eventID: sections[index.section][index.row].id)
+    }
 }
