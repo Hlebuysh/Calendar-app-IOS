@@ -1,12 +1,10 @@
 
 import UIKit
-import Firebase
+//import Firebase
 
 
 
 class AdditionViewController: UIViewController{
-    
-    
     
     @IBOutlet weak private var buttonStack: UIStackView!
     @IBOutlet weak private var yearButton: UIButton!
@@ -19,42 +17,43 @@ class AdditionViewController: UIViewController{
     @IBOutlet weak private var titleText: UITextField!
     @IBOutlet weak private var descriptionText: UITextView!
     
+    @IBOutlet weak var addUserStack: UIStackView!
     @IBOutlet weak private var addUserText: UITextField!
     @IBOutlet weak private var addUserButton: UIButton!
+    
+    private var addUserTextCopy: UITextField!
+    private var addUserButtonCopy: UIButton!
+    
+    private var stackPosition: CGRect = CGRect()
+    @IBOutlet weak var stackTopConstraint: NSLayoutConstraint!
     
     @IBOutlet weak private var importanceSwitch: UISwitch!
     
     @IBOutlet weak private var saveButton: UIButton!
     
-//    private var dropDown: DropDownView?
+    private var dropDown: DropDown!
     
     private let months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
-    
-    private let transporentView = UIView()
-    private let tableView = UITableView()
     
     
     private var selectedButton = UIButton()
     private var isActiveButton:Bool = false
     
-    private var choiceTable = [String]()
-    
     private var group: [String : Int] = [:]
     private var event = Event()
+    
+    var tview: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        dropDown = DropDownView(superVC: self)
-//        dropDown!.tableView.delegate = self
-//        dropDown!.tableView.dataSource = self
+        dropDown = DropDown(superVC: self, selection: changeTitle(title:))
         
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        tableView.isScrollEnabled = true
+        tview = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
+        tview.alpha = 0
+        self.view.addSubview(tview)
         
-        event.group[Auth.auth().currentUser!.uid] = 1
+        event.group[currentUserID()] = 1
         
         yearButton.setTitle(String(Calendar.current.component(.year, from: Date())), for: .normal)
         monthButton.setTitle(months[Calendar.current.component(.month, from: Date()) - 1], for: .normal)
@@ -78,61 +77,38 @@ class AdditionViewController: UIViewController{
             endTimePicker.selectRow(Calendar.current.component(.minute, from: Date()), inComponent: 1, animated: false)
         }
         
+        stackPosition = addUserStack.frame
     }
     
     @IBAction private func choiceYear(_ sender: Any) {
-//        choiceTable = dropDown!.getYears()
-//        selectedButton = yearButton
-//        dropDown!.openTransporentView(data: choiceTable, x: Int(buttonStack.frame.origin.x) + Int(yearButton.frame.origin.x), y: Int(buttonStack.frame.origin.y) + Int(yearButton.frame.origin.y) + Int(yearButton.frame.height), width: Int(yearButton.frame.width))
-        choiceTable.removeAll()
-        for year in Calendar.current.component(.year, from: Date())...(Calendar.current.component(.year, from: Date())+10){
-            choiceTable.append(String(year))
-        }
         selectedButton = yearButton
-        addTransporentView(x: Int(buttonStack.frame.origin.x) + Int(yearButton.frame.origin.x), y: Int(buttonStack.frame.origin.y) + Int(yearButton.frame.origin.y) + Int(yearButton.frame.height), width: Int(yearButton.frame.width))
+        isActiveButton = true
+        dropDown.updateData(data: getYears())
+        dropDown.openTransporentView(
+            x: Int(buttonStack.frame.origin.x) + Int(yearButton.frame.origin.x),
+            y: Int(buttonStack.frame.origin.y) + Int(yearButton.frame.origin.y) + Int(yearButton.frame.height),
+            width: Int(yearButton.frame.width)
+        )
     }
     @IBAction private func choiceMonth(_ sender: Any) {
-//        choiceTable = dropDown!.getMonth(year: yearButton.title(for: .normal)!)
-//        selectedButton = monthButton
-//        dropDown!.openTransporentView(data: choiceTable, x: Int(buttonStack.frame.origin.x) + Int(monthButton.frame.origin.x), y: Int(buttonStack.frame.origin.y) + Int(monthButton.frame.origin.y) + Int(monthButton.frame.height), width: Int(monthButton.frame.width))
-        choiceTable.removeAll()
-        if (Int(yearButton.title(for: .normal)!) == Calendar.current.component(.year, from: Date())){
-            for month in (Calendar.current.component(.month, from: Date())-1)...11{
-                choiceTable.append(months[month])
-            }
-        }else{
-            choiceTable = months
-        }
         selectedButton = monthButton
-        addTransporentView(x: Int(buttonStack.frame.origin.x) + Int(monthButton.frame.origin.x), y: Int(buttonStack.frame.origin.y) + Int(monthButton.frame.origin.y) + Int(monthButton.frame.height), width: Int(monthButton.frame.width))
+        isActiveButton = true
+        dropDown.updateData(data: getMonth(year: yearButton.title(for: .normal)!))
+        dropDown.openTransporentView(
+            x: Int(buttonStack.frame.origin.x) + Int(monthButton.frame.origin.x),
+            y: Int(buttonStack.frame.origin.y) + Int(monthButton.frame.origin.y) + Int(monthButton.frame.height),
+            width: Int(monthButton.frame.width)
+        )
     }
     @IBAction private func choiceDay(_ sender: Any) {
-//        choiceTable = dropDown!.getDays(year: yearButton.title(for: .normal)!, month: monthButton.title(for: .normal)!)
-//        selectedButton = monthButton
-//        dropDown!.openTransporentView(data: choiceTable, x: Int(buttonStack.frame.origin.x) + Int(dayButton.frame.origin.x), y: Int(buttonStack.frame.origin.y) + Int(dayButton.frame.origin.y) + Int(dayButton.frame.height), width: Int(dayButton.frame.width))
-        choiceTable.removeAll()
-        var startDay:Int = 1
-        if ((Int(yearButton.title(for: .normal)!) == Calendar.current.component(.year, from: Date()))
-            && (months.firstIndex(of: monthButton.title(for: .normal)!)!) + 1 == Calendar.current.component(.month, from: Date())){
-            startDay = Calendar.current.component(.day, from: Date())
-        }
-        for day in startDay...28{
-            choiceTable.append(String(day))
-        }
-        let year:Int = Int(yearButton.title(for: .normal) ?? "") ?? 0
-        if (monthButton.title(for: .normal) != "Февраль" || isLeap(year: year)){
-            choiceTable.append(String(29))
-            if (monthButton.title(for: .normal) != "Февраль"){
-                choiceTable.append(String(30))
-                if (monthButton.title(for: .normal) == "Январь" || monthButton.title(for: .normal) == "Март" || monthButton.title(for: .normal) == "Май" || monthButton.title(for: .normal) == "Июль" || monthButton.title(for: .normal) == "Август" || monthButton.title(for: .normal) == "Октябрь" || monthButton.title(for: .normal) == "Декабрь"){
-                    choiceTable.append(String(31))
-                }
-            }
-        }
-
-
         selectedButton = dayButton
-        addTransporentView(x: Int(buttonStack.frame.origin.x) + Int(dayButton.frame.origin.x), y: Int(buttonStack.frame.origin.y) + Int(dayButton.frame.origin.y) + Int(dayButton.frame.height), width: Int(dayButton.frame.width))
+        isActiveButton = true
+        dropDown.updateData(data: getDays(year: yearButton.title(for: .normal)!, month: monthButton.title(for: .normal)!))
+        dropDown.openTransporentView(
+            x: Int(buttonStack.frame.origin.x) + Int(dayButton.frame.origin.x),
+            y: Int(buttonStack.frame.origin.y) + Int(dayButton.frame.origin.y) + Int(dayButton.frame.height),
+            width: Int(dayButton.frame.width)
+        )
     }
     
     
@@ -148,6 +124,18 @@ class AdditionViewController: UIViewController{
             showAlert(message: "Такого пользователя не существует")
         }
     }
+    @IBAction func userChanged(_ sender: Any) {
+        dropDown.updateDataWithReload(
+            data: getUserBySubstring(substring: addUserText.text!),
+            x: Int(addUserStack.frame.origin.x),
+            y: Int(addUserStack.frame.origin.y) + Int(addUserStack.frame.height) + 5,
+            width: Int(addUserText.frame.width))
+    }
+    
+    @IBAction func touchOnUserField(_ sender: Any) {
+        searchUsers()
+    }
+    
     
     
     @IBAction func addEvent(_ sender: Any) {
@@ -155,7 +143,7 @@ class AdditionViewController: UIViewController{
             showAlert(message: "")
             return
         }
-        event.creator = Auth.auth().currentUser!.uid
+        event.creator = currentUserID()
         
         event.date = dayButton.title(for: .normal)!.count == 1 ? "0" : ""
         event.date += dayButton.title(for: .normal)! + "."
@@ -204,7 +192,7 @@ extension AdditionViewController:UIPickerViewDataSource{
 
 extension AdditionViewController:UIPickerViewDelegate{
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String?{
-        return String(row)
+        return row < 10 ? ("0" + String(row)) : String(row)
     }
 }
 
@@ -217,68 +205,35 @@ extension AdditionViewController:UITextViewDelegate{
     }
 }
 
-extension AdditionViewController{
-    private func addTransporentView(x:Int, y:Int, width:Int){
-        let window = UIApplication.shared.keyWindow
-        transporentView.frame = window?.frame ?? self.view.frame
-        self.view.addSubview(transporentView)
-
-        tableView.frame = CGRect(x: x, y: y, width: width, height: 0)
-        self.view.addSubview(tableView)
-        tableView.layer.cornerRadius = 5
-
-        isActiveButton = true
-
-        transporentView.backgroundColor = UIColor.black.withAlphaComponent(0.9)
-        tableView.reloadData()
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(removeTransporentView))
-        transporentView.addGestureRecognizer(tapGesture)
-        transporentView.alpha = 0
-        UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
-            self.transporentView.alpha = 0.5
-
-            self.tableView.frame=CGRect(x: x, y: y+5, width: width, height: self.choiceTable.count * 40 > 300 ? 300 : self.choiceTable.count * 40)
-
-        }, completion: nil)
-    }
-    @objc private func removeTransporentView(){
-        let frames = selectedButton.frame
-        UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
-            self.transporentView.alpha = 0
-
-            self.tableView.frame=CGRect(x: frames.origin.x, y: frames.origin.y + frames.height, width: frames.width, height: 0)
-
-        }, completion: nil)
-        isActiveButton = false
-    }
-}
-
-
-extension AdditionViewController:UITableViewDelegate, UITableViewDataSource{
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = choiceTable[indexPath.row]
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return choiceTable.count
-    }
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 40
-    }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedButton.setTitle(choiceTable[indexPath.row], for: .normal)
-//        dropDown!.closeTransporentView(self)
-        removeTransporentView()
-    }
-}
 
 extension AdditionViewController{
-    private func isLeap(year:Int)->Bool{
-        if (year%400 == 0 || (year%100 != 0 && year%4 == 0)){
-            return true
+    func changeTitle(title: String){
+        if (isActiveButton){
+            selectedButton.setTitle(title, for: .normal)
+            isActiveButton = false
+            return
         }
-        return false
+        addUserText.text = ""
+//        addUserText.r
+//        UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
+//            self.addUserStack.frame = self.stackPosition
+//        }, completion: nil)
+//        self.addUserStack.addConstraint(stackTopConstraint)
+    }
+}
+
+
+extension AdditionViewController{
+    func searchUsers(){
+        dropDown.openTransporentView(
+            x: Int(addUserStack.frame.origin.x),
+            y: Int(addUserStack.frame.origin.y) + Int(addUserStack.frame.height) + 5,
+            width: Int(addUserStack.frame.width)
+        )
+        self.view.bringSubviewToFront(addUserStack)
+//        self.addUserStack.removeConstraint(stackTopConstraint)
+//        UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
+//            self.addUserStack.frame = CGRect(x: self.stackPosition.origin.x, y: 24, width: self.stackPosition.width, height: self.stackPosition.height)
+//        }, completion: nil)
     }
 }

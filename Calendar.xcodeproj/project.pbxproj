@@ -27,6 +27,7 @@
 		CE652FEE291B1C8B00F316B9 /* SideMenu in Frameworks */ = {isa = PBXBuildFile; productRef = CE652FED291B1C8B00F316B9 /* SideMenu */; };
 		CE998D15291ACCF600E57B84 /* AuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE998D14291ACCF600E57B84 /* AuthorizationViewController.swift */; };
 		CE998D17291ACD0C00E57B84 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE998D16291ACD0C00E57B84 /* RegistrationViewController.swift */; };
+		CED2ECE82950A3840035F76B /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED2ECE72950A3840035F76B /* Date.swift */; };
 		CEDA77B22939E82C00186CF8 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDA77B12939E82C00186CF8 /* Users.swift */; };
 		CEDE20482949D9DF001F7613 /* Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDE20472949D9DF001F7613 /* Events.swift */; };
 		CEDE204B294CA80A001F7613 /* RequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDE204A294CA80A001F7613 /* RequestCell.swift */; };
@@ -58,6 +59,7 @@
 		CE37E5AB291E2751004FBF3B /* EventCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventCell.xib; sourceTree = "<group>"; };
 		CE998D14291ACCF600E57B84 /* AuthorizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationViewController.swift; sourceTree = "<group>"; };
 		CE998D16291ACD0C00E57B84 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
+		CED2ECE72950A3840035F76B /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		CEDA77B12939E82C00186CF8 /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
 		CEDE20472949D9DF001F7613 /* Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Events.swift; sourceTree = "<group>"; };
 		CEDE204A294CA80A001F7613 /* RequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCell.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 		CE238BA62910075B00B40540 /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
+				CED2ECE62950A36E0035F76B /* Structs */,
 				CEDA77B02939E7B200186CF8 /* Database */,
 				CE2294F22910DF2E007CE8C1 /* Interface */,
 				CE238BA72910075B00B40540 /* AppDelegate.swift */,
@@ -150,6 +153,14 @@
 				CEDE204A294CA80A001F7613 /* RequestCell.swift */,
 			);
 			path = TableCells;
+			sourceTree = "<group>";
+		};
+		CED2ECE62950A36E0035F76B /* Structs */ = {
+			isa = PBXGroup;
+			children = (
+				CED2ECE72950A3840035F76B /* Date.swift */,
+			);
+			path = Structs;
 			sourceTree = "<group>";
 		};
 		CEDA77B02939E7B200186CF8 /* Database */ = {
@@ -256,6 +267,7 @@
 			files = (
 				CE2294F62910DF6B007CE8C1 /* CalendarViewController.swift in Sources */,
 				CE28BA66291EAE2400A0D631 /* TeamMemberCell.swift in Sources */,
+				CED2ECE82950A3840035F76B /* Date.swift in Sources */,
 				CE0AC6D6293FBE26007BDD85 /* Alert.swift in Sources */,
 				CE0B4409294CF31600BBC91E /* RequestsViewController.swift in Sources */,
 				CE1DD81D292CDE1000770964 /* TransporentView.swift in Sources */,

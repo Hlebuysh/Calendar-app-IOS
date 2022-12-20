@@ -151,10 +151,19 @@ func refuseFromEvent(eventID: String){
         }
     }
     ref.child("events").child(eventID).child("group").child(currentUserID()).setValue(-1)
+    eventRequests.remove(at: eventRequests.firstIndex(where: { event in
+        return event.id == eventID
+    })!)
 }
 
 func agreeToEvent(eventID: String){
     let ref = Database.database(url: "https://calendarappforios-default-rtdb.europe-west1.firebasedatabase.app").reference()
     ref.child("users").child(currentUserID()).child("events").child(eventID).setValue(true)
     ref.child("events").child(eventID).child("group").child(currentUserID()).setValue(1)
+    events.append(eventRequests.remove(at: eventRequests.firstIndex(where: { event in
+        return event.id == eventID
+    })!))
+    events.sort { lEvent, rEvent in
+        return (lEvent.date < rEvent.date) || ((lEvent.date == rEvent.date) && (lEvent.startTime < rEvent.startTime)) || ((lEvent.date == rEvent.date) && (lEvent.startTime == rEvent.startTime) && (lEvent.endTime < rEvent.endTime))
+    }
 }

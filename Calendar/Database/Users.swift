@@ -100,3 +100,14 @@ func didSignIn(complition: @escaping () -> Void){
         }
     }
 }
+
+func getUserBySubstring(substring: String) -> [String]{
+    var result: [String] = []
+    for (key, value) in users{
+        if (value["login"] as! String).prefix(substring.count) == substring{
+            result.append((value["login"] as! String))
+        }
+    }
+    result.sort()
+    return result
+}

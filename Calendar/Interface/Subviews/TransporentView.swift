@@ -7,118 +7,117 @@
 
 import UIKit
 
-//protocol DropDown{
-//
-//}
+class DropDown: UIView{
+    private var tableView: UITableView!
+    private var tapGesture: UITapGestureRecognizer!
+    private var choiceList: [String] = []
+    private var selection: (String) -> Void
 
-class DropDownView {
-    
-    private struct Month{
-        var name: String
-        private var maxDay: Int
-        init(_ name: String, _ maxDay: Int) {
-            self.name = name
-            self.maxDay = maxDay
-        }
-        func getMaxDay(year: Int) -> Int{
-            if (self.name != "Февраль") || !(year%400 == 0 || (year%100 != 0 && year%4 == 0)){
-                return self.maxDay
-            }
-            return self.maxDay + 1
-        }
-    }
-    
-    private let months: [Month] = [Month("Январь", 31),
-                                   Month("Февраль", 28),
-                                   Month("Март", 31),
-                                   Month("Апрель", 30),
-                                   Month("Май", 31),
-                                   Month("Июнь", 30),
-                                   Month("Июль", 31),
-                                   Month("Август", 31),
-                                   Month("Сентябрь", 30),
-                                   Month("Октябрь", 31),
-                                   Month("Ноябрь", 31),
-                                   Month( "Декабрь", 30)]
-    private var transporentView: UIView
-    var tableView: UITableView
-    private var tapGesture: UITapGestureRecognizer
-    
-    init(superVC: UIViewController) {
+    init(superVC: UIViewController, selection: @escaping (String) -> Void) {
+        self.selection = selection
+        super.init(frame: UIApplication.shared.keyWindow?.frame ?? superVC.view.frame)
+        self.selection = selection
+        self.tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.closeTransporentView(_:)))
         
-        self.tapGesture = UITapGestureRecognizer(target: superVC, action: #selector(self.closeTransporentView(_:)))
+        superVC.view.addSubview(self)
+        self.backgroundColor = UIColor.black
         
-        transporentView = UIView()
-        self.transporentView.frame = UIApplication.shared.keyWindow?.frame ?? superVC.view.frame
-        superVC.view.addSubview(self.transporentView)
-        self.transporentView.addGestureRecognizer(tapGesture)
-        self.transporentView.alpha = 0
         
-        tableView = UITableView()
+        self.addGestureRecognizer(tapGesture)
+        self.alpha = 0
+        
+        self.tableView = UITableView()
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         self.tableView.isScrollEnabled = true
-        tableView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+        self.tableView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
         superVC.view.addSubview(self.tableView)
-        tableView.layer.cornerRadius = 5
+        self.tableView.layer.cornerRadius = 5
         
         
+    }
+    
+    required init?(coder: NSCoder) {
+        self.selection = {str in
+            return
+        }
+        super.init(coder: coder)
+        self.tableView = coder.decodeObject(forKey: "tableView") as? UITableView
+        self.tapGesture = coder.decodeObject(forKey: "tapGesture") as? UITapGestureRecognizer
+        self.choiceList = coder.decodeObject(forKey: "choiceList") as! [String]
+        self.selection = coder.decodeObject(forKey: "selection") as! (String) -> Void
+    }
+    override func encode(with coder: NSCoder) {
+        coder.encode(self.tableView, forKey: "tableView")
+        coder.encode(self.tapGesture, forKey: "tapGesture")
+        coder.encode(self.choiceList, forKey: "choiceList")
+        coder.encode(self.selection, forKey: "selection")
     }
 }
 
-extension DropDownView{
-    func openTransporentView(data: [String], x: Int, y: Int, width: Int){
+extension DropDown{
+    func updateData(data: [String]){
+        self.choiceList = data
+
+    }
+}
+
+extension DropDown{
+    func updateDataWithReload(data: [String], x: Int, y: Int, width: Int){
+        self.choiceList = data
+        self.tableView.reloadData()
+        UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
+            self.tableView.frame=CGRect(x: x, y: y+5, width: width, height: self.choiceList.count * 40 > 300 ? 300 : self.choiceList.count * 40)
+
+        }, completion: nil)
+    }
+}
+
+extension DropDown: UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.choiceList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        cell.textLabel?.text = self.choiceList[indexPath.row]
+        return cell
+    }
+    
+}
+extension DropDown: UITableViewDelegate{
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 40
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        closeTransporentView()
+        selection(choiceList[indexPath.row])
+    }
+}
+
+extension DropDown{
+    func openTransporentView(x: Int, y: Int, width: Int){
         
         self.tableView.reloadData()
+        self.tableView.frame = CGRect(x: x, y: y+5, width: width, height: 0)
         
         UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
-            self.transporentView.alpha = 0.5
+            self.alpha = 0.5
 
-            self.tableView.frame=CGRect(x: x, y: y+5, width: width, height: data.count * 40 > 300 ? 300 : data.count * 40)
+            self.tableView.frame=CGRect(x: x, y: y+5, width: width, height: self.choiceList.count * 40 > 300 ? 300 : self.choiceList.count * 40)
 
         }, completion: nil)
     }
     @objc func closeTransporentView(_ sender: UITapGestureRecognizer? = nil){
         UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
-            self.transporentView.alpha = 0
+            self.alpha = 0
+            
 
             self.tableView.frame=CGRect(x: self.tableView.frame.origin.x, y: self.tableView.frame.origin.y, width: self.tableView.frame.size.width, height: 0)
 
         }, completion: nil)
     }
 }
-
-extension DropDownView{
-    func getYears() -> [String]{
-        var years: [String] = []
-        for year in Calendar.current.component(.year, from: Date())...(Calendar.current.component(.year, from: Date())+10){
-            years.append(String(year))
-        }
-        return years
-    }
-    func getMonth(year: String) -> [String]{
-        var months: [String] = []
-        for month in self.months{
-            months.append(month.name)
-        }
-        return months
-    }
-    func getDays(year: String, month: String) -> [String]{
-        var days: [String] = []
-        var startDay: Int = 1
-        if (Int(year) == Calendar.current.component(.month, from: Date())) && (findMonth(month: month) == Calendar.current.component(.month, from: Date())){
-            startDay = Calendar.current.component(.day, from: Date())
-        }
-        for day in startDay...months[findMonth(month: month)].getMaxDay(year: Int(year)!){
-            days.append(String(day))
-        }
-        return days
-    }
-    private func findMonth(month: String) -> Int{
-        for i in 0...11{
-            if months[i].name == month{
-                return (i + 1)
-            }
-        }
-        return 0
-    }
-}
+    

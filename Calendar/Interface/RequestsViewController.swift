@@ -57,9 +57,13 @@ class RequestsViewController: UITableViewController {
 extension RequestsViewController: RequestCellDelegate{
     func addToSchedule(with index: IndexPath) {
         agreeToEvent(eventID: sections[index.section][index.row].id)
+        sections = requestsForming()
+        self.tableView.reloadData()
     }
     
     func removeFromSchedule(with index: IndexPath) {
         refuseFromEvent(eventID: sections[index.section][index.row].id)
+        sections = requestsForming()
+        self.tableView.reloadData()
     }
 }
