@@ -167,3 +167,7 @@ func agreeToEvent(eventID: String){
         return (lEvent.date < rEvent.date) || ((lEvent.date == rEvent.date) && (lEvent.startTime < rEvent.startTime)) || ((lEvent.date == rEvent.date) && (lEvent.startTime == rEvent.startTime) && (lEvent.endTime < rEvent.endTime))
     }
 }
+
+func isRequests() -> Bool{
+    return eventRequests.count == 0 ? false : true
+}

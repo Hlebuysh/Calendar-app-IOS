@@ -28,6 +28,7 @@
 		CE998D15291ACCF600E57B84 /* AuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE998D14291ACCF600E57B84 /* AuthorizationViewController.swift */; };
 		CE998D17291ACD0C00E57B84 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE998D16291ACD0C00E57B84 /* RegistrationViewController.swift */; };
 		CED2ECE82950A3840035F76B /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED2ECE72950A3840035F76B /* Date.swift */; };
+		CED2ECEA2951DE970035F76B /* TabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED2ECE92951DE970035F76B /* TabController.swift */; };
 		CEDA77B22939E82C00186CF8 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDA77B12939E82C00186CF8 /* Users.swift */; };
 		CEDE20482949D9DF001F7613 /* Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDE20472949D9DF001F7613 /* Events.swift */; };
 		CEDE204B294CA80A001F7613 /* RequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDE204A294CA80A001F7613 /* RequestCell.swift */; };
@@ -60,6 +61,7 @@
 		CE998D14291ACCF600E57B84 /* AuthorizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationViewController.swift; sourceTree = "<group>"; };
 		CE998D16291ACD0C00E57B84 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		CED2ECE72950A3840035F76B /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		CED2ECE92951DE970035F76B /* TabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabController.swift; sourceTree = "<group>"; };
 		CEDA77B12939E82C00186CF8 /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
 		CEDE20472949D9DF001F7613 /* Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Events.swift; sourceTree = "<group>"; };
 		CEDE204A294CA80A001F7613 /* RequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCell.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				CE28BA64291EAE2400A0D631 /* TeamMemberCell.swift */,
 				CE28BA65291EAE2400A0D631 /* TeamMemberCell.xib */,
 				CEDE204A294CA80A001F7613 /* RequestCell.swift */,
+				CED2ECE92951DE970035F76B /* TabController.swift */,
 			);
 			path = TableCells;
 			sourceTree = "<group>";
@@ -282,6 +285,7 @@
 				CEDE20482949D9DF001F7613 /* Events.swift in Sources */,
 				CE2294F82910E2D3007CE8C1 /* AdditionViewController.swift in Sources */,
 				CE238BA82910075B00B40540 /* AppDelegate.swift in Sources */,
+				CED2ECEA2951DE970035F76B /* TabController.swift in Sources */,
 				CE238BAA2910075B00B40540 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
