@@ -101,13 +101,26 @@ func didSignIn(complition: @escaping () -> Void){
     }
 }
 
-func getUserBySubstring(substring: String) -> [String]{
+func getUserBySubstring(substring: String, group: [String]) -> [String]{
     var result: [String] = []
     for (key, value) in users{
-        if (value["login"] as! String).prefix(substring.count) == substring{
+        if (value["login"] as! String).prefix(substring.count) == substring &&
+            (group.first(where: { member in
+                return member == key
+            }) == nil)
+        {
             result.append((value["login"] as! String))
         }
     }
     result.sort()
     return result
+}
+
+func changeLogin(newLogin: String){
+    Database.database(url: "https://calendarappforios-default-rtdb.europe-west1.firebasedatabase.app").reference().child("users").child(currentUserID()).child("login").setValue(newLogin)
+    users[currentUserID()]!["login"] = newLogin
+}
+
+func changePassword(newPassword: String){
+    Auth.auth().currentUser!.updatePassword(to: newPassword)
 }

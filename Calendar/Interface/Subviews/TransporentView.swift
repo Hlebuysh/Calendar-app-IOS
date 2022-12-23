@@ -12,6 +12,7 @@ class DropDown: UIView{
     private var tapGesture: UITapGestureRecognizer!
     private var choiceList: [String] = []
     private var selection: (String) -> Void
+    private var is_open: Bool = false
 
     init(superVC: UIViewController, selection: @escaping (String) -> Void) {
         self.selection = selection
@@ -35,7 +36,7 @@ class DropDown: UIView{
         self.tableView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
         superVC.view.addSubview(self.tableView)
         self.tableView.layer.cornerRadius = 5
-        
+//        superVC.view.bringSubviewToFront(self.tableView)
         
         
     }
@@ -110,6 +111,7 @@ extension DropDown{
             self.tableView.frame=CGRect(x: x, y: y+5, width: width, height: self.choiceList.count * 40 > 300 ? 300 : self.choiceList.count * 40)
 
         }, completion: nil)
+        is_open = true
     }
     @objc func closeTransporentView(_ sender: UITapGestureRecognizer? = nil){
         UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
@@ -119,6 +121,11 @@ extension DropDown{
             self.tableView.frame=CGRect(x: self.tableView.frame.origin.x, y: self.tableView.frame.origin.y, width: self.tableView.frame.size.width, height: 0)
 
         }, completion: nil)
+        is_open = false
+    }
+    func isOpen() -> Bool{
+        return is_open
     }
 }
     
+

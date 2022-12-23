@@ -51,8 +51,15 @@ class EventViewController: UIViewController {
         self.titleLable.text = self.event.title
         self.startTimeLable.text = self.event.startTime
         self.endTimeLable.text = self.event.endTime
-        self.descriptionTextView.text = self.event.description
-        
+        if self.event.description != ""{
+            self.descriptionTextView.text = self.event.description
+        }
+        else{
+            self.descriptionTextView.text = "Нет описания"
+            self.descriptionTextView.textColor = UIColor.lightGray
+            self.descriptionTextView.font = UIFont(name: self.descriptionTextView.font!.fontName, size: 24)
+            
+        }
         
         super.viewDidLoad()
         navigationController?.setNavigationBarHidden(true, animated: false)

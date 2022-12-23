@@ -158,10 +158,10 @@
             </objects>
             <point key="canvasLocation" x="-1742.0289855072465" y="-1675.4464285714284"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Tab Controller-->
         <scene sceneID="Z0T-iN-oar">
             <objects>
-                <tabBarController modalPresentationStyle="fullScreen" id="Ega-Gq-M9q" sceneMemberID="viewController">
+                <tabBarController modalPresentationStyle="fullScreen" id="Ega-Gq-M9q" customClass="TabController" customModule="Calendar" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="ZbU-YL-hu4"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="BNS-f0-8wJ">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
@@ -465,7 +465,22 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="agA-8l-A1h" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="9d7-ck-MVh" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="219" y="-2081"/>
+            <point key="canvasLocation" x="219" y="-2076"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="wfH-MP-Ium">
+            <objects>
+                <viewController id="Z7A-8J-LYx" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="27f-ye-fk7">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="paY-hq-Cld"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZEN-Ep-Elm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1420" y="-2105"/>
         </scene>
         <!--Календарь-->
         <scene sceneID="AO5-ei-mE9">
@@ -540,7 +555,7 @@
                                         <color key="value" red="0.18751911774696309" green="0.55453027154981482" blue="0.49999897773963164" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="firstWeekday">
-                                        <integer key="value" value="1"/>
+                                        <integer key="value" value="2"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
@@ -908,6 +923,7 @@
                                                     <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="21"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" textContentType="username"/>
                                                     <connections>
+                                                        <action selector="loginChange:" destination="luD-ml-HDI" eventType="editingChanged" id="2ee-ME-fS9"/>
                                                         <outlet property="delegate" destination="luD-ml-HDI" id="bFI-F8-HsC"/>
                                                     </connections>
                                                 </textField>
@@ -947,6 +963,7 @@
                                                     <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="21"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES" textContentType="new-password"/>
                                                     <connections>
+                                                        <action selector="passwordChange:" destination="luD-ml-HDI" eventType="editingChanged" id="oYA-Do-G46"/>
                                                         <outlet property="delegate" destination="luD-ml-HDI" id="pkp-V9-fff"/>
                                                     </connections>
                                                 </textField>
@@ -998,6 +1015,9 @@
                                                             <integer key="value" value="24"/>
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
+                                                    <connections>
+                                                        <action selector="tapChangeButton:" destination="luD-ml-HDI" eventType="touchUpInside" id="6jt-ed-sHU"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
@@ -1072,13 +1092,16 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="pro-W1-w1j">
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pro-W1-w1j">
                                                     <rect key="frame" x="351" y="24.5" width="49" height="31"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="31" id="Eif-85-eD3"/>
                                                         <constraint firstAttribute="width" constant="47" id="GI9-Ln-CEi"/>
                                                     </constraints>
                                                     <color key="onTintColor" red="0.28234306869999998" green="0.82679638420000001" blue="0.7504406696" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                    <connections>
+                                                        <action selector="switchingNotifications:" destination="luD-ml-HDI" eventType="valueChanged" id="I1M-Hb-VGZ"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                             <constraints>
@@ -1104,7 +1127,10 @@
                     <tabBarItem key="tabBarItem" title="" image="gearshape.fill" catalog="system" id="joe-Wf-4wl"/>
                     <navigationItem key="navigationItem" id="kBb-gf-7Lz"/>
                     <connections>
+                        <outlet property="changeButton" destination="CLA-Ce-3Dd" id="C0u-EN-JAZ"/>
                         <outlet property="loginField" destination="17n-sO-Ajf" id="dfb-JP-ooJ"/>
+                        <outlet property="notificationsSwitch" destination="pro-W1-w1j" id="sbC-zs-Unf"/>
+                        <outlet property="passwordField" destination="Gnu-cu-Gik" id="Zsr-du-giN"/>
                         <outlet property="signOutButton" destination="l1b-0t-dse" id="cgh-Ew-zF9"/>
                         <segue destination="ls0-N7-yfO" kind="show" identifier="FromSettingsToAuthorization" id="0r4-OU-j8s"/>
                     </connections>

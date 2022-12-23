@@ -21,9 +21,6 @@ class AdditionViewController: UIViewController{
     @IBOutlet weak private var addUserText: UITextField!
     @IBOutlet weak private var addUserButton: UIButton!
     
-    private var addUserTextCopy: UITextField!
-    private var addUserButtonCopy: UIButton!
-    
     private var stackPosition: CGRect = CGRect()
     @IBOutlet weak var stackTopConstraint: NSLayoutConstraint!
     
@@ -119,17 +116,35 @@ class AdditionViewController: UIViewController{
         }
         if let member = findUser(login: addUserText.text!){
             event.group[member] = 0
+            dropDown.closeTransporentView()
         }
         else{
             showAlert(message: "Такого пользователя не существует")
         }
     }
     @IBAction func userChanged(_ sender: Any) {
-        dropDown.updateDataWithReload(
-            data: getUserBySubstring(substring: addUserText.text!),
-            x: Int(addUserStack.frame.origin.x),
-            y: Int(addUserStack.frame.origin.y) + Int(addUserStack.frame.height) + 5,
-            width: Int(addUserText.frame.width))
+        if dropDown.isOpen(){
+            if addUserText.text! == ""{
+                dropDown.updateDataWithReload(
+                    data: [],
+                    x: Int(addUserStack.frame.origin.x),
+                    y: Int(addUserStack.frame.origin.y) + Int(addUserStack.frame.height) + 5,
+                    width: Int(addUserText.frame.width))
+
+                return
+            }
+            var group: [String] = []
+            for member in event.group.keys{
+                group.append(member)
+            }
+            dropDown.updateDataWithReload(
+                data: getUserBySubstring(substring: addUserText.text!, group: group),
+                x: Int(addUserStack.frame.origin.x),
+                y: Int(addUserStack.frame.origin.y) + Int(addUserStack.frame.height) + 5,
+                width: Int(addUserText.frame.width))
+            return
+        }
+        searchUsers()
     }
     
     @IBAction func touchOnUserField(_ sender: Any) {
@@ -160,6 +175,11 @@ class AdditionViewController: UIViewController{
         event.endTime += String(endTimePicker.selectedRow(inComponent: 0))+":"
         event.endTime += String(endTimePicker.selectedRow(inComponent: 1)).count == 1 ? "0" : ""
         event.endTime += String(endTimePicker.selectedRow(inComponent: 1))
+        
+        if (event.startTime > event.endTime){
+            showAlert(message: "Начальное время должно быть меньше конечного")
+            return
+        }
         
         event.title = titleText.text!
         
@@ -213,27 +233,36 @@ extension AdditionViewController{
             isActiveButton = false
             return
         }
+        event.group[findUser(login: title)!] = 0
         addUserText.text = ""
-//        addUserText.r
-//        UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
-//            self.addUserStack.frame = self.stackPosition
-//        }, completion: nil)
-//        self.addUserStack.addConstraint(stackTopConstraint)
+        UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
+            self.view.frame = CGRect(x: self.view.frame.origin.x, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+        }, completion: nil)
     }
 }
 
 
 extension AdditionViewController{
     func searchUsers(){
+        if addUserText.text! == ""{
+            dropDown.updateData(data: [])
+        }
+        else{
+            var gr: [String] = []
+            for member in event.group.keys{
+                gr.append(member)
+            }
+            dropDown.updateData(data: getUserBySubstring(substring: addUserText.text!, group: gr))
+        }
         dropDown.openTransporentView(
             x: Int(addUserStack.frame.origin.x),
             y: Int(addUserStack.frame.origin.y) + Int(addUserStack.frame.height) + 5,
-            width: Int(addUserStack.frame.width)
+            width: Int(addUserText.frame.width)
         )
         self.view.bringSubviewToFront(addUserStack)
-//        self.addUserStack.removeConstraint(stackTopConstraint)
-//        UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
-//            self.addUserStack.frame = CGRect(x: self.stackPosition.origin.x, y: 24, width: self.stackPosition.width, height: self.stackPosition.height)
-//        }, completion: nil)
+        
+        UIView.animate(withDuration: 0.4, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
+            self.view.frame = CGRect(x: self.view.frame.origin.x, y: -CGFloat(self.view.frame.height - 320), width: self.view.frame.width, height: self.view.frame.height)
+        }, completion: nil)
     }
 }

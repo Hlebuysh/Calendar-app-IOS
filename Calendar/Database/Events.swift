@@ -135,12 +135,16 @@ func saveEvent(event: Event){
     let ref = Database.database(url: "https://calendarappforios-default-rtdb.europe-west1.firebasedatabase.app").reference()
     let event_id = ref.child("events").childByAutoId()
     event_id.updateChildValues(["creator":event.creator, "date":event.date, "start_time":event.startTime, "end_time":event.endTime, "title":event.title, "description":event.description, "is_important":event.isImpotant, "group":event.group])
-//        print(event_id.key)
-//        print(Auth.auth().currentUser!.uid)
-    for (member, status) in event.group{
+    for member in event.group.keys{
         ref.child("users").child(member).child("events").child(event_id.key!).setValue(false)
     }
     ref.child("users").child(Auth.auth().currentUser!.uid).child("events").child(event_id.key!).setValue(true)
+    events.append(event)
+    events.sort(by: { lEvent, rEvent in
+        return (lEvent.date < rEvent.date) || ((lEvent.date == rEvent.date) && (lEvent.startTime < rEvent.startTime)) || ((lEvent.date == rEvent.date) && (lEvent.startTime == rEvent.startTime) && (lEvent.endTime < rEvent.endTime))
+    })
+    UIViewController.currentViewController().showAlert(title: "Готово", message: "Событие добавлено")
+    
 }
 
 func refuseFromEvent(eventID: String){

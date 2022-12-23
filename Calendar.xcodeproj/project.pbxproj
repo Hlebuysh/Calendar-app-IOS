@@ -100,6 +100,7 @@
 				CE1DD81B292CDDD100770964 /* Subviews */,
 				CE652FE9291AE91D00F316B9 /* TableCells */,
 				CE2294F52910DF6B007CE8C1 /* CalendarViewController.swift */,
+				CED2ECE92951DE970035F76B /* TabController.swift */,
 				CE2294F72910E2D3007CE8C1 /* AdditionViewController.swift */,
 				CE998D14291ACCF600E57B84 /* AuthorizationViewController.swift */,
 				CE998D16291ACD0C00E57B84 /* RegistrationViewController.swift */,
@@ -153,7 +154,6 @@
 				CE28BA64291EAE2400A0D631 /* TeamMemberCell.swift */,
 				CE28BA65291EAE2400A0D631 /* TeamMemberCell.xib */,
 				CEDE204A294CA80A001F7613 /* RequestCell.swift */,
-				CED2ECE92951DE970035F76B /* TabController.swift */,
 			);
 			path = TableCells;
 			sourceTree = "<group>";

@@ -130,5 +130,6 @@ extension CalendarViewController:FSCalendarDataSource{
 extension CalendarViewController{
     func changeButtonTitle(title: String){
         selectedButton.setTitle(title, for: .normal)
+        changeDateOnCalendar()
     }
 }

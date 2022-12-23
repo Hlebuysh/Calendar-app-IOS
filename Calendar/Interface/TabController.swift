@@ -11,7 +11,7 @@ class TabController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if (!isRequests()){
+        if (!isRequests() || !UserDefaults.standard.bool(forKey: "notifications")){
             self.viewControllers?.remove(at: 3)
         }
     }
